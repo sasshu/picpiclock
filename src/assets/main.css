@@ -15,6 +15,12 @@ button {
   }
 }
 
+@media (min-width: 768px) {
+  #app {
+    padding: 0 1rem;
+  }
+}
+
 /* a,
 .green {
   text-decoration: none;

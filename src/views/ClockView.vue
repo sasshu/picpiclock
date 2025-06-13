@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { ref, type Ref, useTemplateRef, onMounted } from "vue";
-import { RouterLink, RouterView } from "vue-router";
 
 const currentClock: Ref<ReturnType<typeof getCurrentClock>> = ref(
   getCurrentClock()
 );
-const container: Ref<HTMLElement | null> = useTemplateRef("container");
-const clockElement: Ref<HTMLElement | null> = useTemplateRef("clock");
+const pipWindow: Ref<Window | null> = ref(null);
+const clock: Ref<HTMLElement | null> = useTemplateRef("clock");
+const clockContent: Ref<HTMLElement | null> = useTemplateRef("clock-content");
+const isPicDisplay: Ref<boolean> = ref(false);
 
 onMounted(() => {
   initializeClock();
@@ -38,42 +39,97 @@ function getCurrentClock() {
 
 // ピクチャーインピクチャー（PIP）を開く
 async function openPictureInPicture() {
-  if (!document.pictureInPictureEnabled) {
+  if (
+    !("documentPictureInPicture" in window && document.pictureInPictureEnabled)
+  ) {
     console.log("Picture-in-Picture is not supported");
     return;
   }
-  const pipWindow: Window = await window.documentPictureInPicture.requestWindow(
-    {
-      width: 400,
-      height: 300,
-    }
-  );
-  // 5. ピクチャーインピクチャーの背景色を設定
-  //   pipBackground = window.getComputedStyle(pipContent).backgroundColor;
-  //   pipWindow.document.body.style.backgroundColor = pipBackground;
-  //   pipWindow.document.body.style.margin = "0";
-
-  pipWindow.addEventListener("load", async () => {
-    pipWindow.document.adoptedStyleSheets = [...document.styleSheets];
-    // pipWindow.document.body.append(clockElement.value as HTMLElement);
+  pipWindow.value = await (
+    window.documentPictureInPicture as DocumentPictureInPicture
+  ).requestWindow({
+    width: 240,
+    height: 90,
   });
-  pipWindow.document.body.append(clockElement.value as HTMLElement);
+
+  // PIPウィンドウにコンテンツを追加
+  pipWindow.value.document.body.appendChild(clockContent.value as HTMLElement);
+
+  // PIPウィンドウにCSSを適用
+  Array.from(document.styleSheets).forEach((styleSheet) => {
+    try {
+      const cssRules = Array.from(styleSheet.cssRules)
+        .map((rule) => rule.cssText)
+        .join("");
+      const style = document.createElement("style");
+
+      style.textContent = cssRules;
+      pipWindow.value?.document.head.appendChild(style);
+    } catch (_) {
+      const link = document.createElement("link");
+      if (styleSheet.href == null) {
+        return;
+      }
+
+      link.rel = "stylesheet";
+      link.type = styleSheet.type;
+      link.media = styleSheet.media.toString();
+      link.href = styleSheet.href;
+      pipWindow.value?.document.head.appendChild(link);
+    }
+  });
+  isPicDisplay.value = true;
 
   // PIPウィンドウが閉じられた際に、コンテンツを元の位置に戻す
-  pipWindow.addEventListener("pagehide", () => {
-    container.value?.append(clockElement.value as HTMLElement);
+  pipWindow.value?.addEventListener("pagehide", async () => {
+    clock.value?.appendChild(clockContent.value as HTMLElement);
+    isPicDisplay.value = false;
   });
+}
+
+// PIPウィンドウを閉じる
+function closePictureInPicture() {
+  if (pipWindow.value) {
+    pipWindow.value?.close();
+    pipWindow.value = null;
+    isPicDisplay.value = false;
+  }
 }
 </script>
 
 <template>
-  <div ref="container">
-    <button class="text-6xl" @click="openPictureInPicture">
-      <ion-icon name="open"></ion-icon>
-    </button>
-    <p ref="clock" class="font-[Roboto] font-semibold text-[150px]">
-      {{ currentClock.time }}
-    </p>
+  <div class="conteiner">
+    <div class="relative">
+      <div
+        v-show="!isPicDisplay"
+        class="absolute -bottom-8 -right-8 sm:-bottom-12 sm:-right-12 md:-bottom-15 md:-right-15"
+      >
+        <button
+          class="text-2xl sm:text-5xl md:text-6xl"
+          @click="openPictureInPicture"
+        >
+          <ion-icon class="rotate-90" name="open"></ion-icon>
+        </button>
+      </div>
+      <div ref="clock">
+        <div ref="clock-content">
+          <p
+            class="font-[Roboto] font-semibold text-5xl sm:text-9xl md:text-[165px]"
+          >
+            {{ currentClock.time }}
+          </p>
+        </div>
+      </div>
+      <div v-if="isPicDisplay" class="text-center">
+        <p class="p-3">ピクチャーインピクチャーで表示中です。</p>
+        <button
+          class="border border-solid rounded-sm bg-(--color-background-mute) p-2"
+          @click="closePictureInPicture"
+        >
+          表示を戻す
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
