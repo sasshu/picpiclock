@@ -2,24 +2,25 @@
 @import "tailwindcss";
 
 #app {
-  max-width: 1280px;
+  /* max-width: 1280px; */
+  width: 100%;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0 1rem;
   font-weight: normal;
 }
 
 button {
   cursor: pointer;
   &:hover {
-    opacity: 0.8;
+    opacity: 0.6;
   }
 }
 
-@media (min-width: 768px) {
+/* @media (min-width: 768px) {
   #app {
     padding: 0 1rem;
   }
-}
+} */
 
 /* a,
 .green {

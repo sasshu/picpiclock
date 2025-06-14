@@ -98,39 +98,45 @@ function closePictureInPicture() {
 </script>
 
 <template>
-  <div class="conteiner">
-    <div class="relative">
-      <div
-        v-show="!isPicDisplay"
-        class="absolute -bottom-8 -right-8 sm:-bottom-12 sm:-right-12 md:-bottom-15 md:-right-15"
+  <div class="relative">
+    <div
+      v-show="!isPicDisplay"
+      class="absolute -bottom-8 -right-8 sm:-bottom-12 sm:-right-12 md:-bottom-15 md:-right-15"
+    >
+      <button class="focusable" @click="openPictureInPicture">
+        <ion-icon
+          class="block w-6 h-6 sm:w-12 sm:h-12 md:w-15 md:h-15 rotate-90"
+          name="open"
+        ></ion-icon>
+      </button>
+    </div>
+    <div ref="clock">
+      <div ref="clock-content">
+        <p
+          class="font-[Roboto] font-semibold text-5xl sm:text-9xl md:text-[165px]"
+        >
+          {{ currentClock.time }}
+        </p>
+      </div>
+    </div>
+    <div v-if="isPicDisplay" class="text-center">
+      <p class="p-3">ピクチャーインピクチャーで表示中です。</p>
+      <button
+        class="focusable bg-(--color-background-soft) p-2"
+        @click="closePictureInPicture"
       >
-        <button
-          class="text-2xl sm:text-5xl md:text-6xl"
-          @click="openPictureInPicture"
-        >
-          <ion-icon class="rotate-90" name="open"></ion-icon>
-        </button>
-      </div>
-      <div ref="clock">
-        <div ref="clock-content">
-          <p
-            class="font-[Roboto] font-semibold text-5xl sm:text-9xl md:text-[165px]"
-          >
-            {{ currentClock.time }}
-          </p>
-        </div>
-      </div>
-      <div v-if="isPicDisplay" class="text-center">
-        <p class="p-3">ピクチャーインピクチャーで表示中です。</p>
-        <button
-          class="border border-solid rounded-sm bg-(--color-background-mute) p-2"
-          @click="closePictureInPicture"
-        >
-          表示を戻す
-        </button>
-      </div>
+        表示を戻す
+      </button>
     </div>
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.focusable {
+  outline: none;
+  border-radius: 0.25rem;
+  &:focus-visible {
+    outline: 2px solid #3b82f6;
+  }
+}
+</style>
