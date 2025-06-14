@@ -39,11 +39,19 @@ function toggleMenu() {
           ></ion-icon>
         </button>
         <ul class="p-[1rem] flex flex-col gap-2">
-          <RouterLink class="focusable px-2 py-1" to="/">時計</RouterLink>
-          <RouterLink class="focusable px-2 py-1" to="/about"
+          <RouterLink
+            class="focusable hover:bg-(--color-background-soft) px-2 py-1"
+            to="/"
+            >時計</RouterLink
+          >
+          <RouterLink
+            class="focusable hover:bg-(--color-background-soft) px-2 py-1"
+            to="/about"
             >カウントダウンタイマー</RouterLink
           >
-          <RouterLink class="focusable px-2 py-1" to="/"
+          <RouterLink
+            class="focusable hover:bg-(--color-background-soft) px-2 py-1"
+            to="/"
             >カウントアップタイマー</RouterLink
           >
         </ul>
