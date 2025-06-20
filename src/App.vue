@@ -18,7 +18,10 @@ function toggleMenu() {
 
 <template>
   <header>
-    <button class="absolute focusable top-[1rem]" @click="toggleMenu">
+    <button
+      class="absolute focusable rounded-sm top-[1rem]"
+      @click="toggleMenu"
+    >
       <ion-icon class="block w-12 h-12 md:w-15 md:h-15" name="menu"></ion-icon>
     </button>
     <div v-if="isMenuOpen" class="fixed inset-0 z-20">
@@ -32,7 +35,10 @@ function toggleMenu() {
         ref="menu-close"
         class="absolute left-0 top-0 h-full w-64 bg-(--color-background) shadow-lg p-4 flex flex-col"
       >
-        <button class="focusable mb-4 flex self-start" @click="toggleMenu">
+        <button
+          class="focusable rounded-sm mb-4 flex self-start"
+          @click="toggleMenu"
+        >
           <ion-icon
             class="block w-12 h-12 md:w-15 md:h-15"
             name="close"
@@ -40,17 +46,17 @@ function toggleMenu() {
         </button>
         <ul class="p-[1rem] flex flex-col gap-2">
           <RouterLink
-            class="focusable hover:bg-(--color-background-soft) px-2 py-1"
+            class="focusable rounded-sm hover:bg-(--color-background-soft) px-2 py-1"
             to="/"
             >時計</RouterLink
           >
           <RouterLink
-            class="focusable hover:bg-(--color-background-soft) px-2 py-1"
+            class="focusable rounded-sm hover:bg-(--color-background-soft) px-2 py-1"
             to="/about"
             >カウントダウンタイマー</RouterLink
           >
           <RouterLink
-            class="focusable hover:bg-(--color-background-soft) px-2 py-1"
+            class="focusable rounded-sm hover:bg-(--color-background-soft) px-2 py-1"
             to="/"
             >カウントアップタイマー</RouterLink
           >
@@ -64,12 +70,4 @@ function toggleMenu() {
   </div>
 </template>
 
-<style scoped lang="scss">
-.focusable {
-  outline: none;
-  border-radius: 0.25rem;
-  &:focus-visible {
-    outline: 2px solid #3b82f6;
-  }
-}
-</style>
+<style scoped lang="scss"></style>

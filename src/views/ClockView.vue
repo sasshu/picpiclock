@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref, type Ref, useTemplateRef, onMounted } from "vue";
+import { ref, type Ref, useTemplateRef, onMounted, onUnmounted } from "vue";
 
 const currentClock: Ref<ReturnType<typeof getCurrentClock>> = ref(
   getCurrentClock()
 );
+const intervalId: Ref<number | null> = ref(null);
 const pipWindow: Ref<Window | null> = ref(null);
 const clock: Ref<HTMLElement | null> = useTemplateRef("clock");
 const clockContent: Ref<HTMLElement | null> = useTemplateRef("clock-content");
@@ -13,14 +14,19 @@ onMounted(() => {
   initializeClock();
 });
 
+onUnmounted(() => {
+  clearInterval(intervalId.value as number);
+  intervalId.value = null;
+});
+
 // 時計を初期化
-const initializeClock = () => {
+function initializeClock(): void {
   setTimeout(() => {
-    const newId = setInterval(() => {
+    intervalId.value = setInterval(() => {
       currentClock.value = getCurrentClock();
     }, 1000);
   }, 1000 - new Date().getUTCMilliseconds());
-};
+}
 
 // 現在の時刻を取得
 function getCurrentClock() {
@@ -30,7 +36,7 @@ function getCurrentClock() {
   const second = date.getSeconds().toString().padStart(2, "0");
 
   return {
-    time: `${hour}:${minute} ${second}`,
+    time: `${hour}:${minute}:${second}`,
     hour: date.getHours(),
     minute: date.getMinutes(),
     second: date.getSeconds(),
@@ -38,7 +44,7 @@ function getCurrentClock() {
 }
 
 // ピクチャーインピクチャー（PIP）を開く
-async function openPictureInPicture() {
+async function openPictureInPicture(): Promise<void> {
   if (
     !("documentPictureInPicture" in window && document.pictureInPictureEnabled)
   ) {
@@ -88,7 +94,7 @@ async function openPictureInPicture() {
 }
 
 // PIPウィンドウを閉じる
-function closePictureInPicture() {
+function closePictureInPicture(): void {
   if (pipWindow.value) {
     pipWindow.value?.close();
     pipWindow.value = null;
@@ -103,7 +109,7 @@ function closePictureInPicture() {
       v-show="!isPicDisplay"
       class="absolute -bottom-8 -right-8 sm:-bottom-12 sm:-right-12 md:-bottom-15 md:-right-15"
     >
-      <button class="focusable" @click="openPictureInPicture">
+      <button class="focusable rounded-sm" @click="openPictureInPicture">
         <ion-icon
           class="block w-6 h-6 sm:w-12 sm:h-12 md:w-15 md:h-15 rotate-90"
           name="open"
@@ -122,7 +128,7 @@ function closePictureInPicture() {
     <div v-if="isPicDisplay" class="text-center">
       <p class="p-3">ピクチャーインピクチャーで表示中です。</p>
       <button
-        class="focusable bg-(--color-background-soft) p-2"
+        class="focusable rounded-sm bg-(--color-background-soft) p-2"
         @click="closePictureInPicture"
       >
         表示を戻す
@@ -131,12 +137,4 @@ function closePictureInPicture() {
   </div>
 </template>
 
-<style scoped lang="scss">
-.focusable {
-  outline: none;
-  border-radius: 0.25rem;
-  &:focus-visible {
-    outline: 2px solid #3b82f6;
-  }
-}
-</style>
+<style scoped lang="scss"></style>
