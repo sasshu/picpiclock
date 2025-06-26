@@ -151,7 +151,9 @@ function closePictureInPicture(): void {
 <template>
   <div ref="timer" class="relative">
     <div ref="timer-content">
-      <div class="relative size-dvw sm:size-[650px] md:size-[750px]">
+      <div
+        class="relative box min-w-[240px] min-h-[240px] max-w-[600px] max-h-[600px]"
+      >
         <!-- SVG進捗バー -->
         <svg viewBox="0 0 100 100">
           <!-- 背景の円 -->
@@ -186,20 +188,17 @@ function closePictureInPicture(): void {
           class="absolute inset-[15%] flex flex-col items-center justify-center"
         >
           <div class="relative">
-            <div class="absolute -top-0 -right-8 sm:-right-12 md:-right-15">
+            <div class="absolute -top-0 -right-10">
               <button
                 v-if="timerMilliseconds > 0 && !isTimerRunning && !isPicDisplay"
                 class="focusable rounded-sm"
                 @click="timerToZero"
               >
-                <ion-icon
-                  class="block w-6 h-6 sm:w-12 sm:h-12 md:w-15 md:h-15"
-                  name="close"
-                ></ion-icon>
+                <ion-icon class="block w-9 h-9" name="close"></ion-icon>
               </button>
             </div>
             <p
-              class="font-[Roboto] font-semibold text-5xl sm:text-8xl md:text-9xl text-center"
+              class="font-[Roboto] font-semibold box-text text-5xl sm:text-6xl md:text-7xl text-center"
             >
               {{ timerText }}
             </p>
@@ -248,12 +247,9 @@ function closePictureInPicture(): void {
             </button>
           </div>
         </div>
-        <div v-show="!isPicDisplay" class="absolute bottom-[8%] right-[8%]">
+        <div v-show="!isPicDisplay" class="absolute bottom-[5%] right-[5%]">
           <button class="focusable rounded-sm" @click="openPictureInPicture">
-            <ion-icon
-              class="block w-8 h-8 sm:w-12 sm:h-12 md:w-15 md:h-15 rotate-90"
-              name="open"
-            ></ion-icon>
+            <ion-icon class="block w-11 h-11 rotate-90" name="open"></ion-icon>
           </button>
         </div>
       </div>
@@ -273,5 +269,12 @@ function closePictureInPicture(): void {
 <style lang="scss">
 .progress-bar {
   transition: stroke-dashoffset 0.3s linear;
+}
+.box {
+  width: min(100dvw, 100dvh);
+  height: min(100dvw, 100dvh);
+}
+.box-text {
+  font-size: max(48px, min(10vw, 10vh));
 }
 </style>
