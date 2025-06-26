@@ -27,6 +27,9 @@ button {
     outline: 2px solid #3b82f6;
   }
 }
+ion-icon {
+  fill: currentColor;
+}
 
 /* @media (min-width: 768px) {
   #app {

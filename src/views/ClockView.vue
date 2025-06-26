@@ -104,7 +104,7 @@ function closePictureInPicture(): void {
 </script>
 
 <template>
-  <div class="relative">
+  <div ref="clock" class="relative">
     <div
       v-show="!isPicDisplay"
       class="absolute -bottom-8 -right-8 sm:-bottom-12 sm:-right-12 md:-bottom-15 md:-right-15"
@@ -116,24 +116,22 @@ function closePictureInPicture(): void {
         ></ion-icon>
       </button>
     </div>
-    <div ref="clock">
-      <div ref="clock-content">
-        <p
-          class="font-[Roboto] font-semibold text-5xl sm:text-9xl md:text-[165px]"
-        >
-          {{ currentClock.time }}
-        </p>
-      </div>
-    </div>
-    <div v-if="isPicDisplay" class="text-center">
-      <p class="p-3">ピクチャーインピクチャーで表示中です。</p>
-      <button
-        class="focusable rounded-sm bg-(--color-background-soft) p-2"
-        @click="closePictureInPicture"
+    <div ref="clock-content">
+      <p
+        class="font-[Roboto] font-semibold text-5xl sm:text-9xl md:text-[165px]"
       >
-        表示を戻す
-      </button>
+        {{ currentClock.time }}
+      </p>
     </div>
+  </div>
+  <div v-if="isPicDisplay" class="text-center">
+    <p class="p-3">ピクチャーインピクチャーで表示中です。</p>
+    <button
+      class="focusable rounded-sm bg-(--color-background-soft) p-2"
+      @click="closePictureInPicture"
+    >
+      表示を戻す
+    </button>
   </div>
 </template>
 

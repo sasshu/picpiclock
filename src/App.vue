@@ -19,7 +19,7 @@ function toggleMenu() {
 <template>
   <header>
     <button
-      class="absolute focusable rounded-sm top-[1rem]"
+      class="absolute z-10 focusable rounded-sm top-[1rem]"
       @click="toggleMenu"
     >
       <ion-icon class="block w-12 h-12 md:w-15 md:h-15" name="menu"></ion-icon>
@@ -55,11 +55,11 @@ function toggleMenu() {
             to="/about"
             >カウントダウンタイマー</RouterLink
           >
-          <RouterLink
+          <!-- <RouterLink
             class="focusable rounded-sm hover:bg-(--color-background-soft) px-2 py-1"
             to="/"
             >カウントアップタイマー</RouterLink
-          >
+          > -->
         </ul>
       </nav>
     </div>
