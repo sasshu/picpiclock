@@ -18,6 +18,7 @@ const isPicDisplay: Ref<boolean> = ref(false);
 
 onUnmounted(() => {
   clearTimerInterval();
+  closePictureInPicture();
 });
 
 const timerText: Ref<string> = computed((): string => {

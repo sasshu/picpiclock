@@ -17,6 +17,7 @@ onMounted(() => {
 onUnmounted(() => {
   clearInterval(intervalId.value as number);
   intervalId.value = null;
+  closePictureInPicture();
 });
 
 // 時計を初期化
