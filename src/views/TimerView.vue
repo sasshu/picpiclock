@@ -1,12 +1,5 @@
 <script setup lang="ts">
-import {
-  ref,
-  type Ref,
-  useTemplateRef,
-  onMounted,
-  onUnmounted,
-  computed,
-} from "vue";
+import { ref, type Ref, useTemplateRef, onUnmounted, computed } from "vue";
 
 // タイマーの初期値を5分に設定
 const DEFAULT_TIMER_MILLISECONDS: number = 1000 * 60 * 5;

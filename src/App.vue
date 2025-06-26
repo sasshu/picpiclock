@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { ref, type Ref, useTemplateRef, onMounted, onBeforeUnmount } from "vue";
+import { ref, type Ref } from "vue";
 import { RouterLink, RouterView, useRouter, type Router } from "vue-router";
-import HelloWorld from "./components/HelloWorld.vue";
 
 const router: Router = useRouter();
 const isMenuOpen: Ref<boolean> = ref(false);
-const menuClose: Ref<HTMLElement | null> = useTemplateRef("menu-close");
 
 router.afterEach(() => {
   isMenuOpen.value = false;
@@ -52,14 +50,9 @@ function toggleMenu() {
           >
           <RouterLink
             class="focusable rounded-sm hover:bg-(--color-background-soft) px-2 py-1"
-            to="/about"
+            to="/timer"
             >カウントダウンタイマー</RouterLink
           >
-          <!-- <RouterLink
-            class="focusable rounded-sm hover:bg-(--color-background-soft) px-2 py-1"
-            to="/"
-            >カウントアップタイマー</RouterLink
-          > -->
         </ul>
       </nav>
     </div>
