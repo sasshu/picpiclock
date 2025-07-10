@@ -7,6 +7,7 @@ const DEFAULT_TIMER_MILLISECONDS: number = 1000 * 60 * 5;
 const initialTimerMilliseconds: Ref<number> = ref(DEFAULT_TIMER_MILLISECONDS);
 const timerMilliseconds: Ref<number> = ref(initialTimerMilliseconds.value);
 const totalTimerMilliseconds: Ref<number> = ref(0);
+const startTimestamp: Ref<number | null> = ref(null);
 
 const intervalId: Ref<number | null> = ref(null);
 const isTimerActive: Ref<boolean> = ref(false);
@@ -49,6 +50,7 @@ const timerPercent: Ref<number> = computed((): number => {
 function clearTimerInterval(): void {
   clearInterval(intervalId.value as number);
   intervalId.value = null;
+  startTimestamp.value = null;
 }
 
 function addSeconds(second: number): void {
@@ -63,6 +65,8 @@ function startTimer(): void {
     initialTimerMilliseconds.value = timerMilliseconds.value;
     isTimerActive.value = true;
   }
+  startTimestamp.value = Date.now();
+
   if (timerMilliseconds.value >= initialTimerMilliseconds.value) {
     totalTimerMilliseconds.value = timerMilliseconds.value;
   }
@@ -72,7 +76,8 @@ function startTimer(): void {
       clearTimerInterval();
       return;
     }
-    timerMilliseconds.value -= 100;
+    const elapsed = Date.now() - (startTimestamp.value as number);
+    timerMilliseconds.value = totalTimerMilliseconds.value - elapsed;
   }, 100);
 }
 
@@ -81,6 +86,7 @@ function resetTimer(): void {
   isTimerActive.value = false;
   timerMilliseconds.value = initialTimerMilliseconds.value;
   totalTimerMilliseconds.value = 0;
+  startTimestamp.value = null;
 }
 
 function timerToZero(): void {
